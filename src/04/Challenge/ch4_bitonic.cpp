@@ -20,28 +20,80 @@
 // Returns: A boolean value: True for bitonic sequences, false otherwise.
 bool is_bitonic(const std::vector<int> &v){
     
-    // Write your code here
-
+    int n = v.size();
+    if (n < 3) return true; // Sequences with less than 3 elements are bitonic by definition
+    
+    // Check each possible rotation
+    //int start = 0;
+    for (int start = 0; start < n; start++) 
+    {
+        int i = 0;
+        bool is_valid = true;
+        
+        // Ascending phase (using modulo for circular shift)
+        while (i < n - 1 && v[(start + i) % n] <= v[(start + i + 1) % n]) {
+            i++;
+        }
+        
+        // If we reached the end, it's monotonic increasing
+        if (i == n - 1) return true;
+        
+        // Descending phase
+        while (i < n - 1 && v[(start + i) % n] >= v[(start + i + 1) % n]) {
+            i++;
+        }
+        
+        // If we reached the end with this rotation, it's bitonic
+        if (i == n - 1) return true;
+    }
+    
     return false;
 }
 
 // Main function
 int main(){
-    // Uncomment one of these lines and make sure you get the result at the right. 
-    
-    std::vector<int> myvec = {1, 2, 5, 4, 3};  // Yes
-    // std::vector<int> myvec = {1, 1, 1, 1, 1};  // Yes
-    // std::vector<int> myvec = {3, 4, 5, 2, 2};  // Yes
-    // std::vector<int> myvec = {3, 4, 5, 2, 4};  // No
-    // std::vector<int> myvec = {1, 2, 3, 4, 5};  // Yes
-    // std::vector<int> myvec = {1, 2, 3, 1, 2};  // No
-    // std::vector<int> myvec = {5, 4, 6, 2, 6};  // No
-    // std::vector<int> myvec = {5, 4, 3, 2, 1};  // Yes
-    // std::vector<int> myvec = {5, 4, 3, 2, 6};  // Yes
-    // std::vector<int> myvec = {5, 4, 6, 5, 4};  // No
-    // std::vector<int> myvec = {5, 4, 6, 5, 5};  // Yes
+    // Test data: vector and expected result
+    std::vector<std::pair<std::vector<int>, bool>> test_cases = {
+        {{1, 2, 5, 4, 3}, true},
+        {{1, 1, 1, 1, 1}, true},
+        {{3, 4, 5, 2, 2}, true},
+        {{3, 4, 5, 2, 4}, false},
+        {{1, 2, 3, 4, 5}, true},
+        {{1, 2, 3, 1, 2}, false},
+        {{5, 4, 6, 2, 6}, false},
+        {{5, 4, 3, 2, 1}, true},
+        {{5, 4, 3, 2, 6}, true},
+        {{5, 4, 6, 5, 4}, false},
+        {{5, 4, 6, 5, 5}, true}
+    };
 
-    std::cout << (is_bitonic(myvec) == true ? "Yes, it is bitonic." : "No, it is not bitonic.");
-    std::cout << std::endl << std::endl << std::flush;
+    int passed = 0;
+    int total = test_cases.size();
+
+    for (int i = 0; i < total; i++) {
+        std::vector<int> vec = test_cases[i].first;
+        bool expected = test_cases[i].second;
+        bool result = is_bitonic(vec);
+
+        std::cout << "Test " << (i + 1) << ": ";
+        std::cout << "{ ";
+        for (int j = 0; j < vec.size(); j++) {
+            std::cout << vec[j];
+            if (j < vec.size() - 1) std::cout << ", ";
+        }
+        std::cout << " } -> ";
+        std::cout << (result ? "Yes" : "No");
+        std::cout << " (Expected: " << (expected ? "Yes" : "No") << ") ";
+        
+        if (result == expected) {
+            std::cout << "[PASS]";
+            passed++;
+        } else {
+            std::cout << "[FAIL]";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl << "Results: " << passed << "/" << total << " tests passed." << std::endl << std::flush;
     return 0;
 }

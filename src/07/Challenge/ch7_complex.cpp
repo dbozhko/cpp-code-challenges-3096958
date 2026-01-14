@@ -18,7 +18,7 @@
 #include "complex_num.h"
 
 // Main function
-int main(){
+int notmain(){
     // Create two complex numbers z and w
     complex_num z(10.0,5.0); 
     complex_num w(-2.0);
@@ -57,5 +57,6 @@ int main(){
     v.print(std::cout);
 
     std::cout << std::endl << std::endl << std::flush;
+
     return 0;
 }

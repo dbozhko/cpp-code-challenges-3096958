@@ -15,6 +15,17 @@ int main(){
     std::cout << "Enter a positive integer: " << std::flush;
     std::cin >> n;
 
+    for (int i = 1; i <= n; i++) {
+        auto i3 = (i % 3) == 0;
+        auto i5 = (i % 5) == 0;
+        if (i3)
+            std::cout << "Fizz";
+        if (i5)
+            std::cout << "Buzz";
+        if(!i3 && !i5)
+            std::cout << i;
+        std::cout << std::endl;
+    }
     // Write your code here
     
     std::cout << std::endl << std::flush;

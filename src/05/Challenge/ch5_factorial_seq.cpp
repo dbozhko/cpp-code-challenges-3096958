@@ -15,10 +15,12 @@
 //           n: The argument of the last factorial to print.
 // Returns: n!, the last calculated factorial.
 int print_factorials(int n){
-    
+ 
     // Write your code here
-
-    return 0;
+    auto z = n==0;
+    n = n ? n * print_factorials(n - 1) : 1;
+    std::cout << (z ? "" : ", ") << n;
+    return n;
 }
 
 // Main function
@@ -27,3 +29,4 @@ int main(){
     std::cout << std::endl << std::endl << std::flush;
     return 0;
 }
+//1 1 2 6 24 120 720 5040 40320 362880 3628800 
