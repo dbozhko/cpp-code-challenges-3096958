@@ -14,12 +14,33 @@
 
 // Finding Relatives, main()
 // Summary: This application displays the first pair of possible relatives from a list of names in a CSV file.
-int main(){
+int notmain(){
     std::fstream file ("names.csv", std::ios::in);
     // Read the CSV file.
     if(file.is_open()){
 
-        // Write your code here
+        std::string line;
+        std::vector<std::pair<std::string, std::string>> family;
+        while(getline(file, line)){
+            std::istringstream ss(line);
+            std::string name;
+            while(getline(ss, name, ',')){
+                // Extract family name
+                std::istringstream name_ss(name);
+                std::string first_name, family_name;
+                name_ss >> first_name >> family_name;
+
+                // Check for possible relatives
+                for(const auto& existing_family_name : family){
+                    if(existing_family_name.second == family_name){
+                        std::cout << "Possible relatives found: " << first_name << " " << family_name << " and another person with family name " << existing_family_name.first << " " << family_name << "\n\n" << std::flush;
+                        file.close();
+                        return 0;
+                    }
+                }
+                family.push_back(std::make_pair(first_name, family_name));
+            }
+        }
     
         file.close();
     }

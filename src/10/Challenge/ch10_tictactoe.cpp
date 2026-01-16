@@ -55,10 +55,33 @@ void make_move(char game[][3], char mark){
 //                                  'X': X won.
 //                                  'O': O won.
 //                                  't': A tie.
-char game_state(char game[][3]){
+char oldgame_state(char game[][3]){
 
     // Write your code here
+    char winner = ' ';
+    int empty_count = 0;
+    // Check diagonals
+    if(game[0][0]==game[1][1] && game[1][1]==game[2][2] && game[0][0]!=' ')
+        winner= game[0][0];
+    if(game[0][2]==game[1][1] && game[1][1]==game[2][0] && game[0][2]!=' ')
+        winner= game[0][2];
 
+    for(int i=0; i<3 && winner==' '; i++){
+        // Check rows and columns
+        if(game[i][0]==game[i][1] && game[i][1]==game[i][2] && game[i][0]!=' ')
+            winner= game[i][0];
+        if(game[0][i]==game[1][i] && game[1][i]==game[2][i] &&  game[0][i]!=' ')
+            winner= game[0][i];
+        // Count empty cells
+        for(int j=0; j<3; j++){
+            if(game[i][j]==' ')
+                empty_count++;
+        }
+    }
+    if(winner!=' ')
+        return winner;
+    if(empty_count==0)
+        return 't';
     return 'a';
 }
 
@@ -81,7 +104,7 @@ void print_game(char game[][3]){
 }
 
 // Main function
-int main(){
+int notmain(){
     char game[3][3] = {{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
     char user_mark = 'X', ai_mark = 'O', turn = 'X';
     std::string str;
@@ -96,7 +119,7 @@ int main(){
 
     print_game(game);
 
-    while(game_state(game)=='a'){
+    while(oldgame_state(game)=='a'){
         std::cout << turn << "'s turn...\n";    
         if(turn==user_mark)
             ask_for_move(game,user_mark);
@@ -105,10 +128,10 @@ int main(){
         print_game(game);
         turn = turn == 'X' ? 'O' : 'X';
     }
-    if(game_state(game)=='t')
+    if(oldgame_state(game)=='t')
         std::cout << "It's a tie.\n\n";
     else    
-        std::cout << game_state(game) << " is the winner.\n\n";
+        std::cout << oldgame_state(game) << " is the winner.\n\n";
     std::cout << std::flush;
     return 0;
 }

@@ -41,4 +41,5 @@ void complex_num::print(std::ostream &os){
         os << " + i" << i;
     else
         os << " - i" << -i;
+    os << std::flush;
 }

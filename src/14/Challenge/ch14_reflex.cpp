@@ -11,6 +11,7 @@
 #include <string>
 #include <chrono>
 #include <algorithm>
+#include <thread>
  
 std::string words[10]={"CAT","RAT","BAT","CAP","BAG","RAG","RAP","BET","BEG","LET"};
 
@@ -27,9 +28,37 @@ int main(){
 
     std::string try_again;
     std::getline(std::cin, try_again);
+    std::srand(std::time(nullptr));
     do{
-
         // Write your code here
+        // Generate a random delay between 4 and 10 seconds
+        int delay = std::rand() % 10 + 4; // Random delay between 4 and 10 seconds
+        std::this_thread::sleep_for(std::chrono::seconds(delay));
+        // Select a random word from the list
+        std::string selected_word = words[std::rand() % 10];
+        std::cout << "Type the word: " << selected_word << std::endl;
+        // Start the timer
+        auto start = std::chrono::high_resolution_clock::now();
+        // Get user input
+        std::string user_input;
+        std::getline(std::cin, user_input);
+        // Stop the timer
+        auto end = std::chrono::high_resolution_clock::now();
+        // Calculate the time taken
+        std::chrono::duration<double> elapsed = end - start;
+        // Check if the input is correct and within 2 seconds
+        std::transform(user_input.begin(), user_input.end(), user_input.begin(), ::toupper);
+        if (user_input == selected_word && elapsed.count() <= 2.0) {
+            std::cout << "Success! You typed the word correctly in " << elapsed.count() << " seconds." << std::endl;
+        } else {
+            std::cout << "Failure! ";
+            if (user_input != selected_word) {
+                std::cout << "The correct word was \"" << selected_word << "\". ";
+            }
+            if (elapsed.count() > 2.0) {
+                std::cout << "You took " << elapsed.count() << " seconds, which is too long." << std::endl;
+            }
+        }
 
         std::cout << "Try again? (Y/N): " << std::flush;
         std::getline(std::cin, try_again);
